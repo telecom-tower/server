@@ -54,6 +54,6 @@ build-snap:
     - find prime
     - cd ${CI_PROJECT_DIR}
     - cp snap/telecom-tower-server*.snap .
-   artifacts:
-     paths:
-       - telecom-tower-server*.snap
+  artifacts:
+    paths:
+      - telecom-tower-server*.snap
