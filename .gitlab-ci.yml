@@ -1,4 +1,4 @@
-image: geomyidae/golang-snap
+image: registry.gitlab.com/telecom-tower/towerserver:latest
 
 stages:
   - lib
