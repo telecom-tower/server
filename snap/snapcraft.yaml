@@ -1,0 +1,23 @@
+name: ws2811-gw
+version: '1.0.0'
+summary: WS2811 Gateway
+description: |
+  This is service serves the WS2811 LEDs
+grade: devel
+confinement: devmode
+type: app
+architectures: [ armhf ]
+icon: meta/gui/icon.png
+
+apps:
+  ws2811gw:
+    daemon: simple
+    command: bin/ws2811gw
+    plugs:
+      - network
+      - network-control
+
+parts:
+  ws2811gw:
+    plugin: dump
+    source: /snaproot

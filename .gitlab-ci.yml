@@ -1,0 +1,60 @@
+image: geomyidae/golang-snap
+
+stages:
+  - lib
+  - build
+  - snap
+
+build-ws2811-lib:
+  stage: lib
+  script:
+    - git clone https://github.com/jgarff/rpi_ws281x.git
+    - cd rpi_ws281x
+    - patch -i ${CI_PROJECT_DIR}/01_cross.patch
+    - scons
+    - cd ${CI_PROJECT_DIR}
+    - mkdir -p install_root/usr/local/lib
+    - cp rpi_ws281x/*.a install_root/usr/local/lib
+    - mkdir -p install_root/usr/local/include
+    - cp rpi_ws281x/*.h install_root/usr/local/include
+    - tar czf rpi_ws281x.tgz -C install_root usr/local
+
+  artifacts:
+    paths:
+      - rpi_ws281x.tgz
+
+build-ws2811-gw:
+  stage: build
+  script:
+    - cd ${CI_PROJECT_DIR}
+    - export CGO_ENABLED=1
+    - export GOOS=linux
+    - export GOARCH=arm
+    - export CC_FOR_TARGET=arm-linux-gnueabihf-gcc
+    - export CC=arm-linux-gnueabihf-gcc
+    - export CXX_FOR_TARGET=arm-linux-gnueabihf-g++
+    - export CPATH=/usr/local/include
+    - export LIBRARY_PATH=/usr/local/lib
+    # - go get -d gitlab.com/geomyidae/ws2811
+    - tar xzf rpi_ws281x.tgz -C /
+    - cd ${CI_PROJECT_DIR}
+    - go-wrapper download
+    - go build
+  artifacts:
+    paths:
+      - towerserver
+
+build-snap:
+  stage: snap
+  script:
+    - cd ${CI_PROJECT_DIR}
+    - mkdir -p /snaproot/bin
+    - cp towerserver /snaproot/bin/
+    - cd snap
+    - snapcraft
+    - find prime
+    - cd ${CI_PROJECT_DIR}
+    - cp snap/*.snap .
+  artifacts:
+    paths:
+      - *.snap
