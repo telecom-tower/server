@@ -1,8 +1,8 @@
-name: ws2811-gw
+name: telecom-tower-server
 version: '1.0.0'
-summary: WS2811 Gateway
+summary: Telecom Tower Server
 description: |
-  This is service serves the WS2811 LEDs
+  Server for the Telecom Tower
 grade: devel
 confinement: devmode
 type: app
@@ -10,14 +10,14 @@ architectures: [ armhf ]
 icon: meta/gui/icon.png
 
 apps:
-  ws2811gw:
+  towerserver:
     daemon: simple
-    command: bin/ws2811gw
+    command: bin/towerserver
     plugs:
       - network
       - network-control
 
 parts:
-  ws2811gw:
+  towerserver:
     plugin: dump
     source: /snaproot

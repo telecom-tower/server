@@ -54,7 +54,8 @@ build-snap:
     - snapcraft
     - find prime
     - cd ${CI_PROJECT_DIR}
-    - cp snap/*.snap .
-  artifacts:
-    paths:
-      - *.snap
+    - ls *.snap
+  #  - cp snap/*.snap .
+  # artifacts:
+  #   paths:
+  #     - *.snap
