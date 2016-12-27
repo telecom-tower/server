@@ -35,7 +35,6 @@ build-ws2811-gw:
     - export CXX_FOR_TARGET=arm-linux-gnueabihf-g++
     - export CPATH=/usr/local/include
     - export LIBRARY_PATH=/usr/local/lib
-    # - go get -d gitlab.com/geomyidae/ws2811
     - tar xzf rpi_ws281x.tgz -C /
     - cd ${CI_PROJECT_DIR}
     - go-wrapper download
@@ -54,8 +53,7 @@ build-snap:
     - snapcraft
     - find prime
     - cd ${CI_PROJECT_DIR}
-    - ls *.snap
-  #  - cp snap/*.snap .
-  # artifacts:
-  #   paths:
-  #     - *.snap
+    - cp snap/telecom-tower-server*.snap .
+   artifacts:
+     paths:
+       - telecom-tower-server*.snap
