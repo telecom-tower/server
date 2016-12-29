@@ -40,7 +40,7 @@ build-ws2811-gw:
     - go build
   artifacts:
     paths:
-      - towerserver
+      - server
 
 build-snap:
   stage: snap
