@@ -1,22 +1,21 @@
 name: telecom-tower-server
-version: '1.1.0'
+version: '1.2.0'
 summary: Telecom Tower Server
-description: Websocket server for the Telecom Tower
+description: Server for the Telecom Tower
 grade: devel
 confinement: devmode
-type: app
 architectures: [ armhf ]
 icon: icon.png
 
 apps:
-  towerserver:
+  server:
     daemon: simple
-    command: bin/towerserver
+    command: bin/server
     plugs:
       - network
       - network-control
 
 parts:
-  towerserver:
+  server:
     plugin: dump
     source: /snaproot

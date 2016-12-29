@@ -47,7 +47,7 @@ build-snap:
   script:
     - cd ${CI_PROJECT_DIR}
     - mkdir -p /snaproot/bin
-    - cp towerserver /snaproot/bin/
+    - cp server /snaproot/bin/
     - cd snap
     - snapcraft
     - find prime

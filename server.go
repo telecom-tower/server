@@ -24,11 +24,11 @@ import (
 	"fmt"
 	log "github.com/Sirupsen/logrus"
 	"github.com/gorilla/mux"
-	"gitlab.com/geomyidae/ws2811gw"
 	"gitlab.com/geomyidae/ws2811"
+	"gitlab.com/geomyidae/ws2811gw"
 	"net/http"
-	"time"
 	"strconv"
+	"time"
 )
 
 const (
