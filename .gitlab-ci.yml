@@ -18,7 +18,6 @@ build-ws2811-lib:
     - mkdir -p install_root/usr/local/include
     - cp rpi_ws281x/*.h install_root/usr/local/include
     - tar czf rpi_ws281x.tgz -C install_root usr/local
-
   artifacts:
     paths:
       - rpi_ws281x.tgz

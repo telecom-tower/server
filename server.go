@@ -42,7 +42,7 @@ func main() {
 	var columns = flag.Int("columns", 128, "LED matrix columns")
 	var dmaNum = flag.Int("dma-num", 5, "DMA Number")
 	var gpioPin = flag.Int("gpio-pin", 18, "GPIO Pin")
-	var port = flag.Int("port", 8484, "HTTP daemon oort")
+	var port = flag.Int("port", 8484, "HTTP daemon port")
 	flag.Parse()
 
 	ledsCount := *rows * *columns
@@ -74,7 +74,6 @@ func main() {
 
 	// Start HTTP server
 	log.Infof("Starting server on port %v", *port)
-	http.Handle("/", r)
 	srv := &http.Server{
 		Handler:      r,
 		Addr:         fmt.Sprintf(":%v", *port),
