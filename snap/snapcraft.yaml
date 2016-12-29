@@ -1,5 +1,5 @@
 name: telecom-tower-server
-version: '1.2.0'
+version: '1.2.1'
 summary: Telecom Tower Server
 description: Server for the Telecom Tower
 grade: devel
