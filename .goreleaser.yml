@@ -6,7 +6,6 @@ builds:
       - linux
     goarch:
       - arm
-      - arm64
     goarm:
       - 6
       - 7
