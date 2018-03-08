@@ -1,0 +1,128 @@
+version: 2
+jobs:
+
+  setup:
+    docker:
+      - image: circleci/golang:1.10
+    environment:
+      - PROTOC_VERSION: "3.5.1"
+    steps:
+      - run: mkdir -p ${HOME}/workspace
+      - run:
+          command: wget -q -nc https://github.com/google/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-linux-x86_64.zip
+          working_directory: /tmp
+      - run:
+          command: unzip /tmp/protoc-${PROTOC_VERSION}-linux-x86_64.zip
+          working_directory: "~/workspace"
+      - run: chmod +rx ${HOME}/workspace/bin/protoc
+      - run: go get -u google.golang.org/grpc
+      - run: go get -u github.com/golang/protobuf/protoc-gen-go
+      - run: cp -a /go/bin/* ${HOME}/workspace/bin
+      - persist_to_workspace:
+          root: "~"
+          paths:
+            - workspace
+
+  test:
+    docker:
+      - image: circleci/golang:1.10
+    working_directory: /go/src/github.com/telecom-tower/server
+    steps:
+      - attach_workspace:
+          at: "~"
+      - run: sudo mkdir -p /usr/local/bin/
+      - run: sudo cp -a ${HOME}/workspace/bin/* /usr/local/bin/
+      - run: sudo mkdir -p /usr/local/include/google/
+      - run: sudo cp -a ${HOME}/workspace/include/google/protobuf /usr/local/include/google/
+      - checkout
+      - run: go get -u github.com/alecthomas/gometalinter
+      - run: gometalinter --install
+      - run:
+          command: git clone https://github.com/telecom-tower/towerapi.git
+          working_directory: /go/src/github.com/telecom-tower/
+      - run: go generate
+      - run: go get -v -t -d ./...
+      - run: gometalinter --deadline 2m main.go
+      - run: go test -v ./...
+      - run: go build
+
+  deploy:
+    docker:
+      - image: circleci/golang:1.10
+    working_directory: /go/src/github.com/telecom-tower/server
+    steps:
+      - attach_workspace:
+          at: "~"
+      - run: sudo mkdir -p /usr/local/bin/
+      - run: sudo cp -a ${HOME}/workspace/bin/* /usr/local/bin/
+      - run: sudo mkdir -p /usr/local/include/google/
+      - run: sudo cp -a ${HOME}/workspace/include/google/protobuf /usr/local/include/google/
+      - checkout
+      - run:
+          command: git clone https://github.com/telecom-tower/towerapi.git
+          working_directory: /go/src/github.com/telecom-tower/
+      - run: go generate
+      - run: go get -v -d ./...
+
+      - run:
+          name: Building and installing C librairie
+          command: |
+            sudo apt-get install build-essential git scons curl
+            echo "deb http://emdebian.org/tools/debian/ jessie main" | sudo tee /etc/apt/sources.list.d/crosstools.list
+            curl http://emdebian.org/tools/debian/emdebian-toolchain-archive.key | sudo apt-key add -
+            sudo dpkg --add-architecture armhf
+            sudo apt-get update
+            sudo apt-get install crossbuild-essential-armhf
+            mkdir -p ${HOME}/src/lib
+            cd ${HOME}/src/lib
+            git clone https://github.com/jgarff/rpi_ws281x.git
+            cd rpi_ws281x
+            scons TOOLCHAIN=arm-linux-gnueabihf
+            sudo mkdir -p /usr/local/lib
+            sudo cp *.a /usr/local/lib
+            sudo mkdir -p /usr/local/include
+            sudo cp *.h /usr/local/include
+      - run:
+          name: Building librarie
+          command: |
+            sudo chown -R circleci:circleci /usr/local/go/pkg
+            go get -v .
+            go build
+          environment:
+            GOOS: "linux"
+            GOARCH: "arm"
+            CGO_ENABLED: "1"
+            CC: arm-linux-gnueabihf-gcc
+            CC_FOR_TARGET: arm-linux-gnueabihf-gcc
+            CXX_FOR_TARGET: arm-linux-gnueabihf-g++
+            CPATH: /usr/local/include
+            LIBRARY_PATH: /usr/local/lib
+
+      - run: go get -u github.com/goreleaser/goreleaser
+      - run: goreleaser --snapshot
+      - store_artifacts:
+          path: dist
+          destination: dist
+      
+workflows:
+    version: 2
+    default:
+      jobs:
+        - setup:
+            filters:
+              tags:
+                only: /.*/
+        - test:
+            requires:
+              - setup
+            filters:
+              tags:
+                only: /.*/
+        - deploy:
+            requires:
+              - test
+            filters:
+              branches:
+                ignore: /.*/
+              tags:
+                only: /^v[0-9]+(\.[0-9]+).*/
