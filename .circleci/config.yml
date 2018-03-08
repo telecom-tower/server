@@ -100,6 +100,8 @@ jobs:
 
       - run: go get -u github.com/goreleaser/goreleaser
       - run: goreleaser
+      - run: git status
+      - run: git status --porcelain
       - store_artifacts:
           path: dist
           destination: dist
