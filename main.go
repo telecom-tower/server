@@ -1,7 +1,6 @@
 package main
 
 //go:generate protoc -I $GOPATH/src/github.com/telecom-tower/towerapi/v1 telecomtower.proto --go_out=plugins=grpc:$GOPATH/src/github.com/telecom-tower/towerapi/v1
-//go:generate esc -prefix html -ignore .DS_Store -o html.go -pkg main html
 
 import (
 	"flag"
