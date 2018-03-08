@@ -99,9 +99,9 @@ jobs:
             LIBRARY_PATH: /usr/local/lib
 
       - run: go get -u github.com/goreleaser/goreleaser
-      - run: goreleaser
       - run: git status
       - run: git status --porcelain
+      - run: goreleaser
       - store_artifacts:
           path: dist
           destination: dist
