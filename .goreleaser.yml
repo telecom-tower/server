@@ -22,3 +22,13 @@ archive:
   files:
     - LICENSE
     - README.md
+
+nfpm:
+  vendor: Bluemasters.
+  homepage: https://github.com/telecom-tower/server
+  maintainer: Jacques Supcik <jacques@supcik.net>
+  description: Telecom Tower gRPC server.
+  license: Apache 2.0
+  formats:
+    - deb
+  bindir: /usr/bin
