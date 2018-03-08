@@ -87,7 +87,6 @@ jobs:
           command: |
             sudo chown -R circleci:circleci /usr/local/go/pkg
             go get -v .
-            go build
           environment:
             GOOS: "linux"
             GOARCH: "arm"
@@ -97,7 +96,6 @@ jobs:
             CXX_FOR_TARGET: arm-linux-gnueabihf-g++
             CPATH: /usr/local/include
             LIBRARY_PATH: /usr/local/lib
-      - run: rm server
       - run: go get -u github.com/goreleaser/goreleaser
       - run: goreleaser
       - store_artifacts:
