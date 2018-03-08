@@ -99,7 +99,7 @@ jobs:
             LIBRARY_PATH: /usr/local/lib
 
       - run: go get -u github.com/goreleaser/goreleaser
-      - run: goreleaser --snapshot
+      - run: goreleaser
       - store_artifacts:
           path: dist
           destination: dist
