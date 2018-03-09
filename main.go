@@ -56,6 +56,7 @@ func main() { // nolint: gocyclo
 
 	// Create and run hub
 	wsopt := ws2811.DefaultOptions
+	wsopt.DmaNum = 10
 	wsopt.Channels[0].Brightness = *brightness
 	wsopt.Channels[0].LedCount = 1024
 	ws, err := ws2811.MakeWS2811(&wsopt)
