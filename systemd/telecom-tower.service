@@ -1,0 +1,14 @@
+[Unit]
+Description=Telecom Tower
+After=network.target
+
+[Service]
+Type=simple
+User=root
+Environment=BRIGHTNESS=128
+EnvironmentFile=/etc/default/telecom-tower
+ExecStart=/usr/bin/telecom-tower-server -brightness=${BRIGHTNESS}
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

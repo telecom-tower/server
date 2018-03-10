@@ -24,7 +24,7 @@ archive:
     - README.md
 
 nfpm:
-  vendor: Bluemasters.
+  vendor: Bluemasters
   homepage: https://github.com/telecom-tower/server
   maintainer: Jacques Supcik <jacques@supcik.net>
   description: Telecom Tower gRPC server.
@@ -32,3 +32,7 @@ nfpm:
   formats:
     - deb
   bindir: /usr/bin
+  files:
+    "systemd/telecom-tower.service": "/etc/systemd/system/telecom-tower.service"
+  config_files:
+    "systemd/default": "/etc/default/telecom-tower"
