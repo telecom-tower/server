@@ -14,31 +14,31 @@ sudo apt install telecom-tower-server
 ### After the installation or after an update, you should restart the SystemD daemon:
 
 ```
-systemctl daemon-reload
+sudo systemctl daemon-reload
 ```
 
 ### Enable the server so that is starts automatically on boot:
 
 ```
-systemctl enable telecom-tower
+sudo systemctl enable telecom-tower
 ```
 
 ### Manually start the server
 
 ```
-systemctl start telecom-tower
+sudo systemctl start telecom-tower
 ```
 or
 ```
-service telecom-tower start
+sudo service telecom-tower start
 ```
 
 ### Manually restart the server
 
 ```
-systemctl restart telecom-tower
+sudo systemctl restart telecom-tower
 ```
 or
 ```
-service telecom-tower restart
+sudo service telecom-tower restart
 ```
