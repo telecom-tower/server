@@ -17,6 +17,7 @@ jobs:
       - run: chmod +rx ${HOME}/workspace/bin/protoc
       - run: go get -u google.golang.org/grpc
       - run: go get -u github.com/golang/protobuf/protoc-gen-go
+      - run: curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
       - run: cp -a /go/bin/* ${HOME}/workspace/bin
       - persist_to_workspace:
           root: "~"
