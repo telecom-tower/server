@@ -98,6 +98,20 @@ jobs:
             LIBRARY_PATH: /usr/local/lib
       - run: go get -u github.com/goreleaser/goreleaser
       - run: goreleaser
+      - run:
+          name: Deploy to bintray
+          command: |
+            FILE=$(ls dist/*linux_armv6.deb | sort -r | head -1)
+            BASEFILE=$(basename $FILE)
+            VERSION=$(echo $BASEFILE | egrep -o '_[0-9][^_]*?_' | sed -e 's/_//g')
+            curl -T $FILE -u${BINTRAY_USER}:${BINTRAY_KEY} https://api.bintray.com/content/${BINTRAY_REPO}/${BINTRAY_PKG}/${VERSION}/${BINTRAY_PATH}/${BINTRAY_PKG}/${BASEFILE};deb_distribution=${BINTRAY_DIST};deb_component=${BINTRAY_COMP};deb_architecture=${BINTRAY_ARCH}
+          environment:
+            BINTRAY_REPO: telecom-tower/deb
+            BINTRAY_PKG: telecom-tower-server
+            BINTRAY_PATH: pool/main/t
+            BINTRAY_DIST: stretch
+            BINTRAY_COMP: rpi
+            BINTRAY_ARCH: armhf
       - store_artifacts:
           path: dist
           destination: dist
