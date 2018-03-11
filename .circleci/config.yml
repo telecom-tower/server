@@ -41,7 +41,7 @@ jobs:
           command: git clone https://github.com/telecom-tower/towerapi.git
           working_directory: /go/src/github.com/telecom-tower/
       - run: go generate
-      - run: go get -v -t -d ./...
+      - run: dep ensure
       - run: gometalinter --deadline 2m main.go
       - run: go test -v ./...
       - run: go build
@@ -62,8 +62,7 @@ jobs:
           command: git clone https://github.com/telecom-tower/towerapi.git
           working_directory: /go/src/github.com/telecom-tower/
       - run: go generate
-      - run: go get -v -d ./...
-
+      - run: dep ensure
       - run:
           name: Building and installing C librairie
           command: |
